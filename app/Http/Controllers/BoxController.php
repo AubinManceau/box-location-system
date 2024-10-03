@@ -63,3 +63,4 @@ class BoxController extends Controller
         return redirect()->route('dashboard');
     }
 }
+
