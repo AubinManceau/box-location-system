@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Box;
+use App\Models\Tenant;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -37,5 +38,7 @@ class DatabaseSeeder extends Seeder
             'price' => 20.00,
             'user_id' => 1,
         ]);
+
+        Tenant::factory(3)->create();
     }
 }
