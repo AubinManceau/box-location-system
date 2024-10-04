@@ -25,6 +25,9 @@
                                 <label for="description" class="mt-2">{{ __('Description') }}</label>
                                 <textarea id="description" class="block mt-1 w-full resize-none rounded-md h-[15rem]" name="description" required></textarea>
 
+                                <label for="adress" class="mt-2">{{ __('Adresse') }}</label>
+                                <input id="adress" class="block mt-1 w-full rounded-md" type="text" name="adress" required/>
+
                                 <label for="price" class="mt-2">{{ __('Prix') }}</label>
                                 <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price" required/>
                             </div>
@@ -47,9 +50,9 @@
                     @foreach ($boxes as $box)
                         <div class="mb-4 border-2 border-gray-800 p-3 rounded-md">
                             <h2 class="text-2xl font-bold">{{ $box->name }}</h2>
-                            <p class="text-gray-600">{{ $box->description }}</p>
-                            <p class="text-gray-600">{{ $box->price }} €</p>
-                            <a href="{{ route('box.show', ['id' => $box->id]) }}">Voir plus</a>
+                            <p class="text-gray-600"><span class="font-bold">Adresse : </span>{{ $box->adress }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
+                            <a href="{{ route('box.show', ['id' => $box->id]) }}" class="font-bold underline">Voir plus</a>
                         </div>
                     @endforeach
                 </div>

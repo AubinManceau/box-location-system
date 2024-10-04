@@ -9,7 +9,8 @@ class BoxController extends Controller
 {
     public function index()
     {
-        $boxes = Box::all();
+        $user_id = auth()->id();
+        $boxes = Box::where('user_id', $user_id)->get();
         return view('dashboard', compact('boxes'));
     }
 
@@ -24,12 +25,14 @@ class BoxController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'adress' => 'required',
             'price' => 'required',
         ]);
 
         Box::create([
             'name' => $request->name,
             'description' => $request->description,
+            'adress' => $request->adress,
             'price' => $request->price,
             'user_id' => auth()->id(),
         ]);
@@ -42,6 +45,7 @@ class BoxController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'adress' => 'required',
             'price' => 'required',
         ]);
 
@@ -49,6 +53,7 @@ class BoxController extends Controller
         $box->update([
             'name' => $request->name,
             'description' => $request->description,
+            'adress' => $request->adress,
             'price' => $request->price,
         ]);
 
