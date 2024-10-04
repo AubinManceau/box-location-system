@@ -26,6 +26,9 @@
 
                                     <label for="description" class="mt-2">{{ __('Description') }}</label>
                                     <textarea id="description" class="block mt-1 w-full resize-none rounded-md h-[15rem]" name="description" required>{{ $box -> description }}</textarea>
+                                    
+                                    <label for="adress" class="mt-2">{{ __('Adresse') }}</label>
+                                    <input id="adress" class="block mt-1 w-full rounded-md" type="text" name="adress" required value='{{ $box -> adress }}'/>
 
                                     <label for="price" class="mt-2">{{ __('Prix') }}</label>
                                     <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price" required value='{{ $box -> price }}'/>
@@ -57,8 +60,9 @@
                 </div>
                 <div class="p-6 text-gray-900 grid grid-cols-3">
                     <div class="mb-4 p-3">
-                        <p class="text-gray-600">{{ $box->description }}</p>
-                        <p class="text-gray-600">{{ $box->price }} €</p>
+                        <p class="text-gray-600"><span class="font-bold">Description : </span>{{ $box->description }}</p>
+                        <p class="text-gray-600"><span class="font-bold">Adresse : </span>{{ $box->adress }}</p>
+                        <p class="text-gray-600"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
                     </div>
                 </div>
             </div>

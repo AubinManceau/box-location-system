@@ -19,6 +19,7 @@ class BoxFactory extends Factory
         return [
             'name' => fake()->name(),
             'description' => fake()->sentence(),
+            'adress' => fake()->address(),
             'price' => fake()->randomFloat(2, 1, 100),
             'user_id' => fake()->numberBetween(1, 10),
         ];
