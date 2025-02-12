@@ -23,10 +23,18 @@
                                 <input id="name" class="block mt-1 w-full rounded-md" type="text" name="name" required autofocus/>
 
                                 <label for="description" class="mt-2">{{ __('Description') }}</label>
-                                <textarea id="description" class="block mt-1 w-full resize-none rounded-md h-[15rem]" name="description" required></textarea>
+                                <textarea id="description" class="block mt-1 w-full resize-none rounded-md h-[10rem]" name="description" required></textarea>
 
                                 <label for="adress" class="mt-2">{{ __('Adresse') }}</label>
                                 <input id="adress" class="block mt-1 w-full rounded-md" type="text" name="adress" required/>
+
+                                <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
+                                <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id">
+                                    <option value="">Aucun locataire</option>
+                                    @foreach ($tenants as $tenant)
+                                        <option value="{{ $tenant->id }}">{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
+                                    @endforeach
+                                </select>
 
                                 <label for="price" class="mt-2">{{ __('Prix') }}</label>
                                 <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price" required/>

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Box extends Model
+class Tenant extends Model
 {
     use HasFactory;
     /**
@@ -15,16 +15,18 @@ class Box extends Model
      */
     protected $fillable = [
         'id',
-        'name',
-        'description',
+        'firstname',
+        'lastname',
+        'email',
+        'phone',
         'adress',
-        'price',
+        'city',
+        'zip_code',
         'user_id',
-        'tenant_id',
     ];
 
-    public function tenants()
+    public function boxes() 
     { 
-        return $this->belongsTo(Tenant::class); 
+        return $this->hasMany(Box::class); 
     }
 }
