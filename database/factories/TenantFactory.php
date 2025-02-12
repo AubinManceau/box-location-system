@@ -21,7 +21,7 @@ class TenantFactory extends Factory
             'lastname' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
-            'address' => $this->faker->address,
+            'adress' => $this->faker->address,
             'city' => $this->faker->city,
             'zip_code' => $this->faker->postcode,
             'user_id' => $this->faker->numberBetween(1, 1),
