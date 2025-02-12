@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('adress');
             $table->string('city');
             $table->string('zip_code');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

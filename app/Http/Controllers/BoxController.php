@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Box;
 use App\Models\Tenant;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -10,17 +11,22 @@ class BoxController extends Controller
 {
     public function index()
     {
-        $boxes = Box::where('user_id', auth()->id())->get();
-        $tenants = Tenant::where('user_id', auth()->id())->get();
-        return view('dashboard', compact('boxes', 'tenants'));
+        $boxes = Box::where("user_id", Auth::user()->id)->get();
+        $tenants = Tenant::where("user_id", Auth::user()->id)->get();
+        return view('dashboard', [
+            'boxes' => $boxes,
+            'tenants' => $tenants,
+        ]);
     }
 
     public function show($id)
     {
         $box = Box::findOrFail($id);
-        $tenants = Tenant::where('user_id', auth()->id())->get();
-        $tenant_id = Tenant::with('boxes')->find($box->tenant_id);
-        return view('box.show', compact('box', 'tenants', 'tenant_id'));
+        $tenants = Tenant::where("user_id", Auth::user()->id)->get();
+        return view('box.show', [
+            'box' => $box,
+            'tenants' => $tenants,
+        ]);
     }
 
     public function create(Request $request)
@@ -38,7 +44,7 @@ class BoxController extends Controller
             'description' => $request->description,
             'adress' => $request->adress,
             'price' => $request->price,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::user()->id,
             'tenant_id' => $request->tenant_id,
         ]);
 

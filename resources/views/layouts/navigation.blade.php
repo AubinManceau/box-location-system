@@ -13,10 +13,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Mes box') }}
+                        {{ __('Boxs') }}
                     </x-nav-link>
                     <x-nav-link :href="route('tenant.index')" :active="request()->routeIs('tenant.index')">
-                        {{ __('Mes locataires') }}
+                        {{ __('Locataires') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('tenant.index')" :active="request()->routeIs('tenant.index')">
+                        {{ __('Modèles de contrat') }}
                     </x-nav-link>
                 </div>
             </div>
