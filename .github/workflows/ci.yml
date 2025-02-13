@@ -17,5 +17,10 @@ jobs:
           script: |
             cd ${{ secrets.PROJECT_PATH }}
             git pull
+            composer install
+            npm install
+            npm run build
+            php artisan migrate:fresh --seed
+
 
  
