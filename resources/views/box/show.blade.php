@@ -70,7 +70,7 @@
                     <div class="mb-4 p-3">
                         <p class="text-gray-600"><span class="font-bold">Description : </span>{{ $box->description }}</p>
                         <p class="text-gray-600"><span class="font-bold">Adresse : </span>{{ $box->adress }}</p>
-                        <p class="text-gray-600"><span class="font-bold">Locataire : </span>{{ $box->tenant_id && isset($tenant_id) ? $tenant_id->firstname .' '. $tenant_id->lastname : 'Pas encore loué' }}</p>
+                        <p class="text-gray-600"><span class="font-bold">Locataire : </span>{{ $box->tenant->id && isset($box->tenant->id) ? $box->tenant->firstname .' '. $box->tenant->lastname : 'Pas encore loué' }}</p>
                         <p class="text-gray-600"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
                     </div>
                 </div>

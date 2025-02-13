@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('adress');
             $table->decimal('price', 8, 2);
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('tenant_id')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants');
             $table->timestamps();
         });
     }

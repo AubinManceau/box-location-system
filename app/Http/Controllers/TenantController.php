@@ -4,20 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tenant;
+use Illuminate\Support\Facades\Auth;
+
 
 class TenantController extends Controller
 {
     public function index()
     {
-        $user_id = auth()->id();
-        $tenants = Tenant::where('user_id', $user_id)->get();
-        return view('tenant.index', compact('tenants'));
+        $tenants = Tenant::where('user_id', Auth::user()->id)->get();
+        return view('tenant.index', [
+            'tenants' => $tenants,
+        ]);
     }
 
     public function show($id)
     {
         $tenant = Tenant::findOrFail($id);
-        return view('tenant.show', compact('tenant'));
+        return view('tenant.show', [
+            'tenant' => $tenant,
+        ]);
     }
 
     public function create(Request $request)
@@ -75,6 +80,11 @@ class TenantController extends Controller
     public function destroy($id)
     {
         $tenant = Tenant::findOrFail($id);
+        $boxes = $tenant->boxes;
+        foreach ($boxes as $box) {
+            $box->tenant_id = null;
+            $box->save();
+        }
         $tenant->delete();
 
         return redirect()->route('tenant.index');

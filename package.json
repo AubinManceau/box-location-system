@@ -16,6 +16,9 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@editorjs/editorjs": "^2.30.8",
+        "@editorjs/header": "^2.8.8",
+        "@editorjs/list": "^2.0.4",
         "font-awesome": "^4.7.0"
     }
 }

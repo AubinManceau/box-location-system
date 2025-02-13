@@ -43,4 +43,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function boxes() 
+    { 
+        return $this->hasMany(Box::class); 
+    }
+
+    public function tenants() 
+    { 
+        return $this->hasMany(Tenant::class); 
+    }
+
+    public function contract_models() 
+    { 
+        return $this->hasMany(ContractModel::class); 
+    }
 }
