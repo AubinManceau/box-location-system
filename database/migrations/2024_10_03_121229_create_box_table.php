@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('adress');
             $table->decimal('price', 8, 2);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tenant_id')->nullable()->constrained('tenants');
+            $table->foreignId('contract_id')->nullable()->constrained('contracts');
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ class Box extends Model
         'adress',
         'price',
         'user_id',
-        'tenant_id',
+        'contract_id',
     ];
 
     public function tenant()
@@ -31,5 +31,10 @@ class Box extends Model
     public function user()
     { 
         return $this->belongsTo(User::class, 'user_id'); 
+    }
+
+    public function contract() 
+    { 
+        return $this->belongsTo(Contract::class, 'contract_id'); 
     }
 }

@@ -30,6 +30,11 @@ class Tenant extends Model
         return $this->hasMany(Box::class); 
     }
 
+    public function contracts() 
+    { 
+        return $this->hasMany(Contract::class); 
+    }
+
     public function user() 
     { 
         return $this->belongsTo(User::class, 'user_id'); 
