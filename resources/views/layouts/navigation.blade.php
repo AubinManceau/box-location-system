@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('tenant.index')" :active="request()->routeIs('tenant.index')">
                         {{ __('Locataires') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('tenant.index')" :active="request()->routeIs('tenant.index')">
+                    <x-nav-link :href="route('contract_model.index')" :active="request()->routeIs('contract_model.index')">
                         {{ __('Modèles de contrat') }}
                     </x-nav-link>
                 </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BoxController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\ContractModelController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -23,6 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
     Route::put('/tenant/{id}', [TenantController::class, 'update'])->name('tenant.update');
     Route::delete('/tenant/{id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
+
+    Route::get('/contract_model', [ContractModelController::class, 'index'])->name('contract_model.index');
+    Route::get('/contract_model/{id}', [ContractModelController::class, 'show'])->name('contract_model.show');
+    Route::post('/contract_model/create', [ContractModelController::class, 'create'])->name('contract_model.create');
+    Route::put('/contract_model/{id}', [ContractModelController::class, 'update'])->name('contract_model.update');
+    Route::delete('/contract_model/{id}', [ContractModelController::class, 'destroy'])->name('contract_model.destroy');
 });
 
 require __DIR__.'/auth.php';
