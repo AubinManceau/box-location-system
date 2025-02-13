@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Box;
 use App\Models\Tenant;
+use App\Models\ContractModel;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -24,6 +25,8 @@ class DatabaseSeeder extends Seeder
         Tenant::factory(3)->create();
 
         Box::factory(6)->create();
+
+        ContractModel::factory(1)->create();
 
     }
 }

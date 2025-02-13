@@ -1,5 +1,7 @@
 <x-app-layout>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -69,10 +71,14 @@
     </div>
 </x-app-layout>
 
-<script>
+<script type="module">
     document.addEventListener("DOMContentLoaded", function () {      
         let editor = new EditorJS({
             holder: "editorjs",
+            tools: { 
+                header: Header, 
+                list: EditorjsList 
+            },
             onChange: () => {
                 saveEditorData();
             }
