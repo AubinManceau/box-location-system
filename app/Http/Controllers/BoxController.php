@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Box;
 use App\Models\Tenant;
+use App\Models\ContractModel;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -23,9 +24,18 @@ class BoxController extends Controller
     {
         $box = Box::findOrFail($id);
         $tenants = Tenant::where("user_id", Auth::user()->id)->get();
+        $contractModels = ContractModel::where('user_id', Auth::user()->id)->get();
+
+        if($box->contract != null){
+            $tenant_id = $box->contract->tenant_id;
+            $tenant = Tenant::findOrFail($tenant_id);
+        }
+
         return view('box.show', [
             'box' => $box,
             'tenants' => $tenants,
+            'tenant' => $tenant ?? null,
+            'contractModels' => $contractModels,
         ]);
     }
 

@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/contract_model/{id}', [ContractModelController::class, 'destroy'])->name('contract_model.destroy');
 
     Route::post('/contract/create', [ContractController::class, 'create'])->name('contract.create');
+    Route::put('/contract/{id}', [ContractController::class, 'update'])->name('contract.update');
     Route::delete('/contract/{id}', [ContractController::class, 'destroy'])->name('contract.destroy');
 });
 

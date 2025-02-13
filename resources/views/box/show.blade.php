@@ -66,10 +66,75 @@
                     </div>
                     <h3 class="text-xl font-bold">Locataire</h3>
                     <div class="mb-4 p-3">
-                        @if ($box->tenant)
-                            <p class="text-gray-600"><span class="font-bold">Nom : </span>{{ $box->tenant->name }}</p>
-                            <p class="text-gray-600"><span class="font-bold">Email : </span>{{ $box->tenant->email }}</p>
-                            <p class="text-gray-600"><span class="font-bold">Téléphone : </span>{{ $box->tenant->phone }}</p>
+                        @if ($box->contract)
+                            <p class="text-gray-600"><span class="font-bold">Nom : </span>{{ $tenant->firstname . ' ' . $tenant->lastname }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Date de début de contrat : </span>{{ $box->contract->contract_date }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Durée du contrat : </span>{{ $box->contract->contract_month_time }} mois</p>
+                            <div class="mt-4 flex gap-2 items-center">
+                                <p class="text-gray-600 font-bold">Contrat :</p>
+
+                                <span
+                                    x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'assign-tenant')"
+                                    class="py-2 px-6 rounded-md bg-gray-800 text-white uppercase cursor-pointer text-xs"
+                                >{{ __('Modifier le contrat') }}</span>
+
+                                <x-modal name="assign-tenant" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                    <form method="post" action="{{ route('contract.update', ['id' => $box->contract_id]) }}" class="p-6">
+                                        @csrf
+                                        @method('put')
+
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            {{ __("Modifier le contrat") }}
+                                        </h2>
+
+                                        <div class="mt-4">
+
+                                            <input type="hidden" name="box_id" value="{{ $box->id }}">
+
+                                            <label for="contract_month_time">{{ __('Durée du contrat (en mois)') }}</label>
+                                            <input id="contract_month_time" class="block mt-1 w-full rounded-md" type="number" name="contract_month_time" value="{{ $box->contract->contract_month_time }}" required autofocus/>
+
+                                            <label for="contract_date" class="mt-2">{{ __('Date de début de contrat') }}</label>
+                                            <input id="contract_date" class="block mt-1 w-full rounded-md" type="date" name="contract_date" value="{{ $box->contract->contract_date }}" required></input>
+
+                                            <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
+                                            <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id" required>
+                                                @foreach ($tenants as $tenant)
+                                                    <option value="{{ $tenant->id }}" {{ $tenant->id === $box->contract->tenant_id ? 'selected' : '' }}>{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <label for="contract_model_id" class="mt-2">{{ __('Modèle de contrat') }}</label>
+                                            <select id="contract_model_id" class="block mt-1 w-full rounded-md" name="contract_model_id" required>
+                                                @foreach ($contractModels as $contractModel)
+                                                    <option value="{{ $contractModel->id }}" {{ $contractModel->id === $box->contract->contract_model_id ? 'selected' : '' }}>{{ $contractModel->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-6 flex justify-end">
+                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('annuler') }}
+                                            </x-secondary-button>
+
+                                            <x-primary-button class="ms-3">
+                                                {{ __('Générer le contrat') }}
+                                            </x-primary-button>
+                                        </div>
+                                    </form>
+                                </x-modal>
+
+                                <form action="{{ route('contract.destroy', ['id' => $box->id]) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+
+                                    <input type="hidden" name="contract_id" value="{{ $box->contract_id }}">
+                                    <input type="hidden" name="box_id" value="{{ $box->id }}">
+                                    <x-danger-button>
+                                        {{ __('Supprimer le contrat') }}
+                                    </x-danger-button>
+                                </form>
+                            </div>
                         @else
                             <p class="text-gray-600 mb-4">Pas de locataire</p>
                             <span
@@ -79,7 +144,7 @@
                             >{{ __('Ajouter un locataire') }}</span>
 
                             <x-modal name="assign-tenant" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                <form method="post" action="{{ route('box.create') }}" class="p-6">
+                                <form method="post" action="{{ route('contract.create') }}" class="p-6">
                                     @csrf
 
                                     <h2 class="text-lg font-medium text-gray-900">
@@ -87,16 +152,19 @@
                                     </h2>
 
                                     <div class="mt-4">
+
+                                        <input type="hidden" name="box_id" value="{{ $box->id }}">
+
                                         <label for="contract_month_time">{{ __('Durée du contrat (en mois)') }}</label>
-                                        <input id="contract_month_time" class="block mt-1 w-full rounded-md" type="text" name="contract_month_time" required autofocus/>
+                                        <input id="contract_month_time" class="block mt-1 w-full rounded-md" type="number" name="contract_month_time" required autofocus/>
 
                                         <label for="contract_date" class="mt-2">{{ __('Date de début de contrat') }}</label>
-                                        <textarea id="contract_date" class="block mt-1 w-full resize-none rounded-md h-[10rem]" name="contract_date" required></textarea>
+                                        <input id="contract_date" class="block mt-1 w-full rounded-md" type="date" name="contract_date" required></input>
 
                                         <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
                                         <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id" required>
                                             @foreach ($tenants as $tenant)
-                                                <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
+                                                <option value="{{ $tenant->id }}">{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
                                             @endforeach
                                         </select>
 
