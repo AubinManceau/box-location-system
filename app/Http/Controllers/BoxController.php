@@ -102,7 +102,7 @@ class BoxController extends Controller
             '%box_adress%' => $contract->box->adress,
             '%box_id%' => $contract->box_id,
             '%contract_date%' => $contract->date_start,
-            '%contract_month_time%' => \Carbon\Carbon::parse($contract->date_start)->diffInMonths(\Carbon\Carbon::parse($contract->date_end)),
+            '%contract_month_time%' => ceil(\Carbon\Carbon::parse($contract->date_start)->diffInMonths(\Carbon\Carbon::parse($contract->date_end))),
             '%contract_rent%' => $contract->price ?? $contract->box->price,
             '&nbsp;' => ' ',
         ];
@@ -119,7 +119,7 @@ class BoxController extends Controller
                 }
             }
         }
-        
+
         return $decodedContent;
     }    
 }
