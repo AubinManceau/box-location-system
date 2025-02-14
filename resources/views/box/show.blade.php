@@ -73,7 +73,9 @@
                             <p class="text-gray-600"><span class="font-bold">Date de fin du contrat : </span>{{ $contract->date_end }}</p>
                             <p class="text-gray-600"><span class="font-bold">Prix : </span>{{ $contract->price == null ? $box->price : $contract->price }}€ / mois</p>
                             <div class="mt-4 flex gap-2 items-center">
-                                <p class="text-gray-600 font-bold">Contrat :</p>
+                                <p class="text-gray-600 font-bold">Actions :</p>
+
+                                <button class="text-gray-600 font-bold cursor-pointer py-2 px-4 border-2 uppercase text-xs rounded-md border-gray-800" onclick="document.querySelector('#contract-content').classList.toggle('hidden')">Voir le contrat</button>
 
                                 <span
                                     x-data=""
@@ -138,6 +140,26 @@
                                         {{ __('Supprimer le contrat') }}
                                     </x-danger-button>
                                 </form>
+                            </div>
+                            <div class="mt-6 hidden" id="contract-content">
+                                <div class="bg-gray-100 p-4 rounded-lg" >
+                                    @foreach ($contract_content['blocks'] as $block)
+                                        @if ($block['type'] === 'header')
+                                            <h{{ $block['data']['level'] }} class="mb-2">{{ $block['data']['text'] }}</h{{ $block['data']['level'] }}>
+                                        @elseif ($block['type'] === 'paragraph')
+                                            <p class="mb-2">{{ $block['data']['text'] }}</p>
+                                        @elseif ($block['type'] === 'list')
+                                            <ul class="mb-2">
+                                                @foreach ($block['data']['items'] as $item)
+                                                    <li>{{ $item }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    @endforeach
+                                </div>
+                                <x-secondary-button class="mt-2">
+                                    {{ __('Télécharger le contrat') }}
+                                </x-secondary-button>
                             </div>
                         @else
                             <p class="text-gray-600 mb-4">Pas de locataire</p>

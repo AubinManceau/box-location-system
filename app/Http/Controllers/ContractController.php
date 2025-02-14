@@ -73,5 +73,4 @@ class ContractController extends Controller
 
         return redirect()->route('box.show', $id);
     }
-    
 }

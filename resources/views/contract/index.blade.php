@@ -26,13 +26,10 @@
                                 <tr class="border-b">
                                     <td class="p-2 border">{{ $contract->date_end < now()->format('Y-m-d') ? 'Terminé' : 'En cours' }}</td>
                                     <td class="p-2 border">{{ $contract->tenant->firstname . ' ' . $contract->tenant->lastname }}</td>
-                                    <td class="p-2 border">{{ $contract->price == null ? $contract->box->price : $contract->price }}</td>
+                                    <td class="p-2 border">{{ $contract->price == null ? $contract->box->price : $contract->price }} €</td>
                                     <td class="p-2 border">{{ $contract->date_start }}</td>
                                     <td class="p-2 border">{{ $contract->date_end }}</td>
                                     <td class="p-2 border flex gap-4 justify-center">
-                                        <x-primary-button>
-                                            {{ __('Télécharger') }}
-                                        </x-primary-button>
                                         <form action="{{ route('contract.destroy', ['id' => $contract->box_id]) }}" method="post">
                                             @csrf
                                             @method('delete')
