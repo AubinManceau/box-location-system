@@ -30,14 +30,6 @@
                                     <label for="adress" class="mt-2">{{ __('Adresse') }}</label>
                                     <input id="adress" class="block mt-1 w-full rounded-md" type="text" name="adress" required value='{{ $box -> adress }}'/>
 
-                                    <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
-                                    <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id">
-                                        <option value="">Aucun locataire</option>
-                                        @foreach ($tenants as $tenant)
-                                            <option value="{{ $tenant->id }}" {{ $box->tenant_id === $tenant->id ? 'selected' : ''}}>{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
-                                        @endforeach
-                                    </select>
-
                                     <label for="price" class="mt-2">{{ __('Prix') }}</label>
                                     <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price" required value='{{ $box -> price }}'/>
                                 </div>
@@ -66,12 +58,164 @@
                         </form>
                     </div>
                 </div>
-                <div class="p-6 text-gray-900 grid grid-cols-3">
+                <div class="p-6 text-gray-900">
                     <div class="mb-4 p-3">
                         <p class="text-gray-600"><span class="font-bold">Description : </span>{{ $box->description }}</p>
                         <p class="text-gray-600"><span class="font-bold">Adresse : </span>{{ $box->adress }}</p>
-                        <p class="text-gray-600"><span class="font-bold">Locataire : </span>{{ $box->tenant->id && isset($box->tenant->id) ? $box->tenant->firstname .' '. $box->tenant->lastname : 'Pas encore loué' }}</p>
-                        <p class="text-gray-600"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
+                        <p class="text-gray-600 mb-2"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
+                        <a href="{{ route('contract.index', ['id' => $box->id]) }}" class="py-2 px-4 rounded-md bg-blue-800 text-white uppercase cursor-pointer text-xs">Historique de location</a>
+                    </div>
+                    <h3 class="text-xl font-bold">Locataire actuel</h3> 
+                    <div class="mb-4 p-3">
+                        @if ($contract)
+                            <p class="text-gray-600"><span class="font-bold">Nom : </span>{{ $contract->tenant->firstname . ' ' . $contract->tenant->lastname }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Date de début de contrat : </span>{{ $contract->date_start }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Date de fin du contrat : </span>{{ $contract->date_end }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Prix : </span>{{ $contract->price == null ? $box->price : $contract->price }}€ / mois</p>
+                            <div class="mt-4 flex gap-2 items-center">
+                                <p class="text-gray-600 font-bold">Actions :</p>
+
+                                <button class="text-gray-600 font-bold cursor-pointer py-2 px-4 border-2 uppercase text-xs rounded-md border-gray-800" onclick="document.querySelector('#contract-content').classList.toggle('hidden')">Voir le contrat</button>
+
+                                <span
+                                    x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'assign-tenant')"
+                                    class="py-2 px-6 rounded-md bg-gray-800 text-white uppercase cursor-pointer text-xs"
+                                >{{ __('Modifier le contrat') }}</span>
+
+                                <x-modal name="assign-tenant" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                    <form method="post" action="{{ route('contract.update', ['id' => $contract->id]) }}" class="p-6">
+                                        @csrf
+                                        @method('put')
+
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            {{ __("Modifier le contrat") }}
+                                        </h2>
+
+                                        <div class="mt-4">
+
+                                            <input type="hidden" name="box_id" value="{{ $box->id }}">
+
+                                            <label for="date_start">{{ __('Date de début du contrat') }}</label>
+                                            <input id="date_start" class="block mt-1 w-full rounded-md" type="date" name="date_start" value="{{ $contract->date_start }}" required autofocus/>
+
+                                            <label for="date_end" class="mt-2">{{ __('Date de fin du contrat') }}</label>
+                                            <input id="date_end" class="block mt-1 w-full rounded-md" type="date" name="date_end" value="{{ $contract->date_end }}" required></input>
+
+                                            <label for="price" class="mt-2">{{ __('Prix') }}</label>
+                                            <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price" value="{{ $contract->price == null ? $box->price : $contract->price }}"/>
+
+                                            <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
+                                            <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id" required>
+                                                @foreach ($tenants as $tenant)
+                                                    <option value="{{ $tenant->id }}" {{ $tenant->id === $contract->tenant_id ? 'selected' : '' }}>{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <label for="contract_model_id" class="mt-2">{{ __('Modèle de contrat') }}</label>
+                                            <select id="contract_model_id" class="block mt-1 w-full rounded-md" name="contract_model_id" required>
+                                                @foreach ($contractModels as $contractModel)
+                                                    <option value="{{ $contractModel->id }}" {{ $contractModel->id === $contract->contract_model_id ? 'selected' : '' }}>{{ $contractModel->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-6 flex justify-end">
+                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('annuler') }}
+                                            </x-secondary-button>
+
+                                            <x-primary-button class="ms-3">
+                                                {{ __('Générer le contrat') }}
+                                            </x-primary-button>
+                                        </div>
+                                    </form>
+                                </x-modal>
+
+                                <form action="{{ route('contract.destroy', ['id' => $box->id]) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+
+                                    <input type="hidden" name="contract_id" value="{{ $contract->id }}">
+                                    <x-danger-button>
+                                        {{ __('Supprimer le contrat') }}
+                                    </x-danger-button>
+                                </form>
+                            </div>
+                            <div class="mt-6 hidden" id="contract-content">
+                                <div class="bg-gray-100 p-4 rounded-lg" >
+                                    @foreach ($contract_content['blocks'] as $block)
+                                        @if ($block['type'] === 'header')
+                                            <h{{ $block['data']['level'] }} class="mb-2">{{ $block['data']['text'] }}</h{{ $block['data']['level'] }}>
+                                        @elseif ($block['type'] === 'paragraph')
+                                            <p class="mb-2">{{ $block['data']['text'] }}</p>
+                                        @elseif ($block['type'] === 'list')
+                                            <ul class="mb-2">
+                                                @foreach ($block['data']['items'] as $item)
+                                                    <li>{{ $item }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    @endforeach
+                                </div>
+                                <x-secondary-button class="mt-2">
+                                    {{ __('Télécharger le contrat') }}
+                                </x-secondary-button>
+                            </div>
+                        @else
+                            <p class="text-gray-600 mb-4">Pas de locataire</p>
+                            <span
+                                x-data=""
+                                x-on:click.prevent="$dispatch('open-modal', 'assign-tenant')"
+                                class="py-2 px-6 rounded-lg bg-gray-800 text-white uppercase cursor-pointer"
+                            >{{ __('Ajouter un locataire') }}</span>
+
+                            <x-modal name="assign-tenant" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                <form method="post" action="{{ route('contract.create') }}" class="p-6">
+                                    @csrf
+
+                                    <h2 class="text-lg font-medium text-gray-900">
+                                        {{ __("Assigner un locataire à ce box") }}
+                                    </h2>
+
+                                    <div class="mt-4">
+
+                                        <input type="hidden" name="box_id" value="{{ $box->id }}">
+
+                                        <label for="date_start">{{ __('Date de début du contrat') }}</label>
+                                        <input id="date_start" class="block mt-1 w-full rounded-md" type="date" name="date_start" required autofocus/>
+
+                                        <label for="date_end" class="mt-2">{{ __('Date de fin du contrat') }}</label>
+                                        <input id="date_end" class="block mt-1 w-full rounded-md" type="date" name="date_end" required></input>
+
+                                        <label for="price" class="mt-2">{{ __('Prix') }}</label>
+                                        <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price"/>
+
+                                        <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
+                                        <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id" required>
+                                            @foreach ($tenants as $tenant)
+                                                <option value="{{ $tenant->id }}">{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        <label for="contract_model_id" class="mt-2">{{ __('Modèle de contrat') }}</label>
+                                        <select id="contract_model_id" class="block mt-1 w-full rounded-md" name="contract_model_id" required>
+                                            @foreach ($contractModels as $contractModel)
+                                                <option value="{{ $contractModel->id }}">{{ $contractModel->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mt-6 flex justify-end">
+                                        <x-secondary-button x-on:click="$dispatch('close')">
+                                            {{ __('annuler') }}
+                                        </x-secondary-button>
+
+                                        <x-primary-button class="ms-3">
+                                            {{ __('Générer le contrat') }}
+                                        </x-primary-button>
+                                    </div>
+                                </form>
+                            </x-modal>
+                        @endif
                     </div>
                 </div>
             </div>

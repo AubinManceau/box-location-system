@@ -22,7 +22,6 @@ class BoxFactory extends Factory
             'adress' => fake()->address(),
             'price' => fake()->randomFloat(2, 1, 100),
             'user_id' => fake()->numberBetween(1, 1),
-            'tenant_id' => fake()->numberBetween(1, 3),
         ];
     }
 }
