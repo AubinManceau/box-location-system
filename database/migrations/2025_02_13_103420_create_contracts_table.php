@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->integer('contract_month_time');
-            $table->date('contract_date');
+            $table->date('date_start');
+            $table->date('date_end');
+            $table->decimal('price', 10, 2)->nullable();
             $table->foreignId('tenant_id')->constrained('tenants')->onDelete('cascade');
             $table->foreignId('contract_model_id')->constrained('contract_models')->onDelete('cascade');
+            $table->foreignId('box_id')->constrained('boxes');
             $table->timestamps();
         });
     }

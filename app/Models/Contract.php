@@ -11,9 +11,11 @@ class Contract extends Model
 
     protected $fillable = [
         'id',
-        'contract_month_time',
-        'contract_date',
+        'date_start',
+        'date_end',
+        'price',
         'tenant_id',
+        'box_id',
         'contract_model_id',
     ];
 
@@ -27,8 +29,8 @@ class Contract extends Model
         return $this->belongsTo(ContractModel::class, 'contract_model_id');
     }
 
-    public function boxes()
+    public function box()
     {
-        return $this->hasMany(Box::class);
+        return $this->belongsTo(Box::class, 'box_id');
     }
 }

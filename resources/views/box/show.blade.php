@@ -62,14 +62,16 @@
                     <div class="mb-4 p-3">
                         <p class="text-gray-600"><span class="font-bold">Description : </span>{{ $box->description }}</p>
                         <p class="text-gray-600"><span class="font-bold">Adresse : </span>{{ $box->adress }}</p>
-                        <p class="text-gray-600"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
+                        <p class="text-gray-600 mb-2"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
+                        <a href="{{ route('contract.index', ['id' => $box->id]) }}" class="py-2 px-4 rounded-md bg-blue-800 text-white uppercase cursor-pointer text-xs">Historique de location</a>
                     </div>
-                    <h3 class="text-xl font-bold">Locataire</h3>
+                    <h3 class="text-xl font-bold">Locataire actuel</h3> 
                     <div class="mb-4 p-3">
-                        @if ($box->contract)
-                            <p class="text-gray-600"><span class="font-bold">Nom : </span>{{ $tenant->firstname . ' ' . $tenant->lastname }}</p>
-                            <p class="text-gray-600"><span class="font-bold">Date de début de contrat : </span>{{ $box->contract->contract_date }}</p>
-                            <p class="text-gray-600"><span class="font-bold">Durée du contrat : </span>{{ $box->contract->contract_month_time }} mois</p>
+                        @if ($contract)
+                            <p class="text-gray-600"><span class="font-bold">Nom : </span>{{ $contract->tenant->firstname . ' ' . $contract->tenant->lastname }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Date de début de contrat : </span>{{ $contract->date_start }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Date de fin du contrat : </span>{{ $contract->date_end }}</p>
+                            <p class="text-gray-600"><span class="font-bold">Prix : </span>{{ $contract->price == null ? $box->price : $contract->price }}€ / mois</p>
                             <div class="mt-4 flex gap-2 items-center">
                                 <p class="text-gray-600 font-bold">Contrat :</p>
 
@@ -80,7 +82,7 @@
                                 >{{ __('Modifier le contrat') }}</span>
 
                                 <x-modal name="assign-tenant" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                    <form method="post" action="{{ route('contract.update', ['id' => $box->contract_id]) }}" class="p-6">
+                                    <form method="post" action="{{ route('contract.update', ['id' => $contract->id]) }}" class="p-6">
                                         @csrf
                                         @method('put')
 
@@ -92,23 +94,26 @@
 
                                             <input type="hidden" name="box_id" value="{{ $box->id }}">
 
-                                            <label for="contract_month_time">{{ __('Durée du contrat (en mois)') }}</label>
-                                            <input id="contract_month_time" class="block mt-1 w-full rounded-md" type="number" name="contract_month_time" value="{{ $box->contract->contract_month_time }}" required autofocus/>
+                                            <label for="date_start">{{ __('Date de début du contrat') }}</label>
+                                            <input id="date_start" class="block mt-1 w-full rounded-md" type="date" name="date_start" value="{{ $contract->date_start }}" required autofocus/>
 
-                                            <label for="contract_date" class="mt-2">{{ __('Date de début de contrat') }}</label>
-                                            <input id="contract_date" class="block mt-1 w-full rounded-md" type="date" name="contract_date" value="{{ $box->contract->contract_date }}" required></input>
+                                            <label for="date_end" class="mt-2">{{ __('Date de fin du contrat') }}</label>
+                                            <input id="date_end" class="block mt-1 w-full rounded-md" type="date" name="date_end" value="{{ $contract->date_end }}" required></input>
+
+                                            <label for="price" class="mt-2">{{ __('Prix') }}</label>
+                                            <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price" value="{{ $contract->price == null ? $box->price : $contract->price }}"/>
 
                                             <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
                                             <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id" required>
                                                 @foreach ($tenants as $tenant)
-                                                    <option value="{{ $tenant->id }}" {{ $tenant->id === $box->contract->tenant_id ? 'selected' : '' }}>{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
+                                                    <option value="{{ $tenant->id }}" {{ $tenant->id === $contract->tenant_id ? 'selected' : '' }}>{{ $tenant->firstname . ' ' . $tenant->lastname }}</option>
                                                 @endforeach
                                             </select>
 
                                             <label for="contract_model_id" class="mt-2">{{ __('Modèle de contrat') }}</label>
                                             <select id="contract_model_id" class="block mt-1 w-full rounded-md" name="contract_model_id" required>
                                                 @foreach ($contractModels as $contractModel)
-                                                    <option value="{{ $contractModel->id }}" {{ $contractModel->id === $box->contract->contract_model_id ? 'selected' : '' }}>{{ $contractModel->name }}</option>
+                                                    <option value="{{ $contractModel->id }}" {{ $contractModel->id === $contract->contract_model_id ? 'selected' : '' }}>{{ $contractModel->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -128,8 +133,7 @@
                                     @csrf
                                     @method('delete')
 
-                                    <input type="hidden" name="contract_id" value="{{ $box->contract_id }}">
-                                    <input type="hidden" name="box_id" value="{{ $box->id }}">
+                                    <input type="hidden" name="contract_id" value="{{ $contract->id }}">
                                     <x-danger-button>
                                         {{ __('Supprimer le contrat') }}
                                     </x-danger-button>
@@ -155,11 +159,14 @@
 
                                         <input type="hidden" name="box_id" value="{{ $box->id }}">
 
-                                        <label for="contract_month_time">{{ __('Durée du contrat (en mois)') }}</label>
-                                        <input id="contract_month_time" class="block mt-1 w-full rounded-md" type="number" name="contract_month_time" required autofocus/>
+                                        <label for="date_start">{{ __('Date de début du contrat') }}</label>
+                                        <input id="date_start" class="block mt-1 w-full rounded-md" type="date" name="date_start" required autofocus/>
 
-                                        <label for="contract_date" class="mt-2">{{ __('Date de début de contrat') }}</label>
-                                        <input id="contract_date" class="block mt-1 w-full rounded-md" type="date" name="contract_date" required></input>
+                                        <label for="date_end" class="mt-2">{{ __('Date de fin du contrat') }}</label>
+                                        <input id="date_end" class="block mt-1 w-full rounded-md" type="date" name="date_end" required></input>
+
+                                        <label for="price" class="mt-2">{{ __('Prix') }}</label>
+                                        <input id="price" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="price"/>
 
                                         <label for="tenant_id" class="mt-2">{{ __('Locataire') }}</label>
                                         <select id="tenant_id" class="block mt-1 w-full rounded-md" name="tenant_id" required>

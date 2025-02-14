@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Box;
 use App\Models\Tenant;
+use App\Models\Contract;
 use App\Models\ContractModel;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,17 +25,16 @@ class BoxController extends Controller
     {
         $box = Box::findOrFail($id);
         $tenants = Tenant::where("user_id", Auth::user()->id)->get();
-        $contractModels = ContractModel::where('user_id', Auth::user()->id)->get();
+        $contractModels = ContractModel::where("user_id", Auth::user()->id)->get();
 
-        if($box->contract != null){
-            $tenant_id = $box->contract->tenant_id;
-            $tenant = Tenant::findOrFail($tenant_id);
-        }
-
+        $contract = Contract::where("box_id", $id)
+            ->where('date_end', '>=', now()->format('Y-m-d'))
+            ->first();
+        
         return view('box.show', [
             'box' => $box,
             'tenants' => $tenants,
-            'tenant' => $tenant ?? null,
+            'contract' => $contract ?? null,
             'contractModels' => $contractModels,
         ]);
     }
@@ -46,7 +46,6 @@ class BoxController extends Controller
             'description' => 'required',
             'adress' => 'required',
             'price' => 'required',
-            'tenant_id' => 'nullable',
         ]);
 
         Box::create([
@@ -55,7 +54,6 @@ class BoxController extends Controller
             'adress' => $request->adress,
             'price' => $request->price,
             'user_id' => Auth::user()->id,
-            'tenant_id' => $request->tenant_id,
         ]);
 
         return redirect()->route('dashboard');
@@ -68,7 +66,6 @@ class BoxController extends Controller
             'description' => 'required',
             'adress' => 'required',
             'price' => 'required',
-            'tenant_id' => 'nullable',
         ]);
 
         $box = Box::findOrFail($id);
@@ -77,7 +74,6 @@ class BoxController extends Controller
             'description' => $request->description,
             'adress' => $request->adress,
             'price' => $request->price,
-            'tenant_id' => $request->tenant_id,
         ]);
 
         return redirect()->route('box.show', $id);

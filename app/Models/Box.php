@@ -20,7 +20,6 @@ class Box extends Model
         'adress',
         'price',
         'user_id',
-        'contract_id',
     ];
 
     public function tenant()
@@ -35,6 +34,6 @@ class Box extends Model
 
     public function contract() 
     { 
-        return $this->belongsTo(Contract::class, 'contract_id'); 
+        return $this->hasMany(Contract::class); 
     }
 }
