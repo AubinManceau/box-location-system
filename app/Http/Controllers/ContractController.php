@@ -8,10 +8,10 @@ use App\Models\Box;
 
 class ContractController extends Controller
 {
-    public function index($id){
+    public function show($id){
         $contracts = Contract::where("box_id", $id)->get();
         $box = Box::findOrFail($id);
-        return view('contract.index', [
+        return view('contract.show', [
             'contracts' => $contracts,
             'box' => $box,
         ]);
