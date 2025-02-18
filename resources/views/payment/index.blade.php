@@ -31,7 +31,7 @@
                                         <td class="p-2 border">{{ $bill->contract->tenant->firstname . ' ' . $bill->contract->tenant->lastname }}</td>
                                         <td class="p-2 border">{{ $bill->payment_amount }} €</td>
                                         <td class="p-2 border">
-                                            <input type="date" class="border-none" name="payment_date">
+                                            <input type="date" class="border-none" name="payment_date" required>
                                         </td>
                                         <td class="p-2 border">
                                             <button type="submit" class="py-2 px-4 rounded-md bg-blue-800 text-white uppercase cursor-pointer text-xs">
