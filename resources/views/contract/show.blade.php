@@ -29,7 +29,7 @@
                                     <td class="p-2 border">{{ $contract->price == null ? $contract->box->price : $contract->price }} €</td>
                                     <td class="p-2 border">{{ $contract->date_start }}</td>
                                     <td class="p-2 border">{{ $contract->date_end }}</td>
-                                    <td class="p-2 border flex gap-4 justify-center">
+                                    <td class="p-2 border flex gap-2 justify-center">
                                         <form action="{{ route('contract.destroy', ['id' => $contract->box_id]) }}" method="post">
                                             @csrf
                                             @method('delete')

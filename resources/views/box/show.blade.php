@@ -63,7 +63,7 @@
                         <p class="text-gray-600"><span class="font-bold">Description : </span>{{ $box->description }}</p>
                         <p class="text-gray-600"><span class="font-bold">Adresse : </span>{{ $box->adress }}</p>
                         <p class="text-gray-600 mb-2"><span class="font-bold">Loyer mensuel : </span>{{ $box->price }} €</p>
-                        <a href="{{ route('contract.index', ['id' => $box->id]) }}" class="py-2 px-4 rounded-md bg-blue-800 text-white uppercase cursor-pointer text-xs">Historique de location</a>
+                        <a href="{{ route('contract.show', ['id' => $box->id]) }}" class="py-2 px-4 rounded-md bg-blue-800 text-white uppercase cursor-pointer text-xs">Historique de location</a>
                     </div>
                     <h3 class="text-xl font-bold">Locataire actuel</h3> 
                     <div class="mb-4 p-3">
@@ -71,7 +71,9 @@
                             <p class="text-gray-600"><span class="font-bold">Nom : </span>{{ $contract->tenant->firstname . ' ' . $contract->tenant->lastname }}</p>
                             <p class="text-gray-600"><span class="font-bold">Date de début de contrat : </span>{{ $contract->date_start }}</p>
                             <p class="text-gray-600"><span class="font-bold">Date de fin du contrat : </span>{{ $contract->date_end }}</p>
-                            <p class="text-gray-600"><span class="font-bold">Prix : </span>{{ $contract->price == null ? $box->price : $contract->price }}€ / mois</p>
+                            <div class="flex items-center gap-2">
+                                <p class="text-gray-600"><span class="font-bold">Prix : </span>{{ $contract->price == null ? $box->price : $contract->price }}€ / mois</p>
+                            </div>
                             <div class="mt-4 flex gap-2 items-center">
                                 <p class="text-gray-600 font-bold">Actions :</p>
 
