@@ -24,8 +24,8 @@
                         
                         <div class="mb-4">
                             <h3 class="text-lg font-semibold">Détails de la location</h3>
-                            <p><strong>Date de début:</strong> {{ $date_start < $bill->contract->date_start ? $bill->contract->date_start : $date_start->format('Y-m-d')  }}</p>
-                            <p><strong>Date de fin:</strong> {{ $date_end > $bill->contract->date_end ? $bill->contract->date_end : $date_end->format('Y-m-d') }}</p>
+                            <p><strong>Date de début:</strong> {{ $date_start < $bill->contract->date_start ? $bill->contract->date_start : $date_start }}</p>
+                            <p><strong>Date de fin:</strong> {{ $date_end > $bill->contract->date_end ? $bill->contract->date_end : $date_end }}</p>
                             <p><strong>Montant:</strong> {{ $bill->contract->price ? $bill->contract->price : $bill->contract->box->price }} €</p>
                         </div>
                     </div>
