@@ -8,6 +8,7 @@ use App\Http\Controllers\ContractModelController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\TaxeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
     Route::put('/payment/bill/{id}', [PaymentController::class, 'update'])->name('payment.update');
+
+    Route::get('/taxe', [TaxeController::class, 'index'])->name('taxe.index');
 });
 
 require __DIR__.'/auth.php';

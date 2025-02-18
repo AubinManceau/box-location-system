@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('payment.index')" :active="request()->routeIs('payment.index')">
                         {{ __('Paiements') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('taxe.index')" :active="request()->routeIs('taxe.index')">
+                        {{ __('Impôts') }}
+                    </x-nav-link>
                 </div>
             </div>
 
