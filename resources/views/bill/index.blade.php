@@ -22,7 +22,7 @@
                                 <td class="p-2 border">{{ $contract->tenant->firstname . ' ' .  $contract->tenant->lastname }}</td>
                                 <td class="p-2 border">{{ $contract->price ? $contract->price : $contract->box->price }} €</td>
                                 <td class="p-2 border">
-                                    @if (!\App\Models\Bill::where('contract_id', $contract->id)->whereBetween('created_at', [$date_start, $date_end])->exists())
+                                    @if (!\App\Models\Bill::where('contract_id', $contract->id)->whereBetween('created_at', [$date_start->copy()->addMonth(), $date_end->copy()->addMonth()])->exists())
                                     <span
                                         x-data=""
                                         x-on:click.prevent="$dispatch('open-modal', 'generate_bill_{{ $contract->id }}')"
@@ -43,16 +43,16 @@
 
                                                 <label for="date_start">{{ __('Date de début de la facture') }}</label>
                                                 <input id="date_start" class="block mt-1 w-full rounded-md" type="date" name="date_start" 
-                                                value="{{ $date_start < $contract->date_start ? $contract->date_start : $date_start }}" readonly/>
+                                                value="{{ $date_start < $contract->date_start ? $contract->date_start : $date_start->format('Y-m-d') }}" readonly/>
 
                                                 <label for="date_end" class="mt-2">{{ __('Date de fin de la facture') }}</label>
-                                                <input id="date_end" class="block mt-1 w-full rounded-md" type="date" name="date_end" value="{{ $date_end > $contract->date_end ? $contract->date_end : $date_end }}" readonly></input>
+                                                <input id="date_end" class="block mt-1 w-full rounded-md" type="date" name="date_end" value="{{ $date_end > $contract->date_end ? $contract->date_end : $date_end->format('Y-m-d') }}" readonly></input>
 
                                                 <label for="payment_amount" class="mt-2">{{ __('Montant') }}</label>
                                                 <input id="payment_amount" class="block mt-1 w-full rounded-md" type="number" step=".01" min="0" name="payment_amount" value="{{ $contract->price ? $contract->price : $contract->box->price }}" required/>
 
                                                 <label for="period_number" class="mt-2">{{ __('Nombre de mois depuis le début de la location') }}</label>
-                                                <input id="period_number" class="block mt-1 w-full rounded-md" type="number" min="1" name="period_number" value="{{ $contract->bills->count() + 1 }}" required/>
+                                                <input id="period_number" class="block mt-1 w-full rounded-md" type="number" min="1" name="period_number" value="{{ $contract->bills->count() + 1 }}" readonly/>
 
                                             </div>
                                             <div class="mt-6 flex justify-end">
@@ -68,7 +68,7 @@
                                     </x-modal>
                                     @else
                                     @php
-                                        $bill = \App\Models\Bill::where('contract_id', $contract->id)->whereBetween('created_at', [$date_start, $date_end])->first();
+                                        $bill = \App\Models\Bill::where('contract_id', $contract->id)->whereBetween('created_at', [$date_start->copy()->addMonth(), $date_end->copy()->addMonth()])->first();
                                     @endphp
                                     <a href="{{ route('bill.show', ['id' => $bill->id]) }}" class="py-2 px-7 rounded-md bg-blue-400 text-white uppercase cursor-pointer text-xs">{{ __('Voir la facture') }}</a>
                                     @endif

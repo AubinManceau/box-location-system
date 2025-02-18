@@ -6,7 +6,7 @@
                     <h2 class="text-2xl font-bold text-gray-900 uppercase">Ma facture</h2>
                 </div>
                 <div class="p-6 text-gray-900">
-                    <div class="max-w-2xl mx-auto p-6 rounded-lg">
+                    <div class="max-w-2xl p-6 rounded-lg">
                         <h2 class="text-2xl font-bold text-gray-800 mb-4">Facture</h2>
                         
                         <div class="mb-4">
@@ -17,16 +17,16 @@
                         
                         <div class="mb-4">
                             <h3 class="text-lg font-semibold">Locataire</h3>
-                            <p><strong>Nom:</strong> {{ $bill->contract->box->tenant->firstname . ' ' . $bill->contract->box->tenant->lastname }}</p>
-                            <p><strong>Email:</strong> {{ $bill->contract->box->tenant->email }}</p>
-                            <p><strong>Téléphone:</strong> {{ $bill->contract->box->tenant->phone }}</p>
+                            <p><strong>Nom:</strong> {{ $tenant->firstname . ' ' . $tenant->lastname }}</p>
+                            <p><strong>Email:</strong> {{ $tenant->email }}</p>
+                            <p><strong>Téléphone:</strong> {{ $tenant->phone }}</p>
                         </div>
                         
                         <div class="mb-4">
                             <h3 class="text-lg font-semibold">Détails de la location</h3>
-                            <p><strong>Date de début:</strong> 01/03/2025</p>
-                            <p><strong>Date de fin:</strong> 07/03/2025</p>
-                            <p><strong>Prix:</strong> 500€</p>
+                            <p><strong>Date de début:</strong> {{ $date_start < $bill->contract->date_start ? $bill->contract->date_start : $date_start->format('Y-m-d')  }}</p>
+                            <p><strong>Date de fin:</strong> {{ $date_end > $bill->contract->date_end ? $bill->contract->date_end : $date_end->format('Y-m-d') }}</p>
+                            <p><strong>Montant:</strong> {{ $bill->contract->price ? $bill->contract->price : $bill->contract->box->price }} €</p>
                         </div>
                     </div>
                 </div>

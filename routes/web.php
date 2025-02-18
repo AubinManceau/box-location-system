@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\ContractModelController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ContractController;
 
 Route::middleware('auth')->group(function () {
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/bill', [BillController::class, 'index'])->name('bill.index');
     Route::post('/bill/create', [BillController::class, 'create'])->name('bill.create');
     Route::get('/bill/{id}', [BillController::class, 'show'])->name('bill.show');
+
+    Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+    Route::put('/payment/bill/{id}', [PaymentController::class, 'update'])->name('payment.update');
 });
 
 require __DIR__.'/auth.php';
