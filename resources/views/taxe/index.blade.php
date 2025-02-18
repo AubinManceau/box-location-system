@@ -7,7 +7,7 @@
                 </div>
                 <div class="p-6 text-gray-900">
                     @if ($annualTurnover == 0)
-                        <p class="text-center">Vous n'avez généré aucune facture ou reçu aucun paiement</p>
+                        <p class="text-center">Vous n'avez reçu aucun paiement</p>
                     @else
                         <table class="w-full table-auto text-center">
                             <thead>
